@@ -1,5 +1,4 @@
 import argparse
-from email.policy import default
 import cv2
 import glob
 import numpy as np
@@ -25,7 +24,7 @@ def main():
     parser.add_argument('--large_model', action='store_true', help='use large model, only provided for real image sr')
     parser.add_argument('--model_path', type=str,
                         default='model_zoo/swinir/001_classicalSR_DIV2K_s48w8_SwinIR-M_x2.pth')
-    parser.add_argument('--folder_lq', type=str, default=None, help='input low-quality test image folder')
+    parser.add_argument('--folder_lq', type=str, default="data/raw_data", help='input low-quality test image folder')
     parser.add_argument('--folder_gt', type=str, default=None, help='input ground-truth test image folder')
     parser.add_argument('--tile', type=int, default=None, help='Tile size, None for no tile during testing (testing as a whole)')
     parser.add_argument('--tile_overlap', type=int, default=32, help='Overlapping of different tiles')
@@ -59,7 +58,7 @@ def main():
     test_results['psnr_b'] = []
     psnr, ssim, psnr_y, ssim_y, psnr_b = 0, 0, 0, 0, 0
     
-    ############################################################
+        ############################################################
     
     video_list:list[dict] = []
 
@@ -75,14 +74,12 @@ def main():
                 "FPS": FPS,
                 "upped_imgs": [],
             })
-    
     for item in video_list:
-        raw_files_list.remove((item["idx"], item["path"]))
-        counter = 0
+        raw_files_list.pop(item["idx"])
+        counter = item["idx"]
         for _path in item["video_frames_list"]:
             raw_files_list.append((counter, _path))
             counter += 1
-                
     ############################################################
 
     for idx, path in raw_files_list:
@@ -108,17 +105,17 @@ def main():
             output = np.transpose(output[[2, 1, 0], :, :], (1, 2, 0))  # CHW-RGB to HCW-BGR
         output = (output * 255.0).round().astype(np.uint8)  # float32 to uint8
         
-        #####################################################
+                #####################################################
         if "frame" in imgname:
             for item in video_list:
                 for img in item["video_frames_list"]:
                     if imgname in img:
-                        img_path = f'data/processed_data/{imgname}.png'
+                        img_path = f'temp/{imgname}.png'
                         item["upped_imgs"].append(img_path)
                         cv2.imwrite(img_path, output)
             
         else:
-            cv2.imwrite(f'{save_dir}/{imgname}_SwinIR.png', output)
+            cv2.imwrite(f'{save_dir}/{imgname}.png', output)
         for item in video_list:
             for img in item["video_frames_list"]:
                 if imgname in img:
@@ -127,6 +124,7 @@ def main():
         
         
         #####################################################
+
         # evaluate psnr/ssim/psnr_b
         if img_gt is not None:
             img_gt = (img_gt * 255.0).round().astype(np.uint8)  # float32 to uint8
@@ -151,14 +149,13 @@ def main():
                   format(idx, imgname, psnr, ssim, psnr_y, ssim_y, psnr_b))
         else:
             print('Testing {:d} {:20s}'.format(idx, imgname))
-            
     #######################################################
 
     for item in video_list:
-        vc.generate_video(item["upped_imgs"], save_dir, f"{item['video_name']}_SwinIR", item["FPS"], args.save_frames)
+        vc.generate_video(item["upped_imgs"], save_dir, item['video_name'], item["FPS"], args.save_frames)
     
     #######################################################
-    
+
     # summarize psnr/ssim
     if img_gt is not None:
         ave_psnr = sum(test_results['psnr']) / len(test_results['psnr'])
@@ -235,7 +232,7 @@ def define_model(args):
 def setup(args):
     # 001 classical image sr/ 002 lightweight image sr
     if args.task in ['classical_sr', 'lightweight_sr']:
-        save_dir = f'{args.folder_ts}/swinir_{args.task}_x{args.scale}'
+        save_dir =f'{args.folder_ts}/swinir_{args.task}_x{args.scale}'
         folder = args.folder_gt
         border = args.scale
         window_size = 8
@@ -338,6 +335,6 @@ def test(img_lq, model, args, window_size):
     return output
 
 if __name__ == '__main__':
-    for file in [x for x in sorted(os.listdir("data/processed_data/")) if not "ipynb_checkpoints" in x]:
-        os.remove(f"data/processed_data/{file}")
+    for file in os.listdir("temp/"):
+        os.remove(file)
     main()
