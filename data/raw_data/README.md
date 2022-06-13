@@ -1,0 +1,1 @@
+# Put your images and videos into this directory
