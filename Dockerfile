@@ -14,4 +14,4 @@ RUN mkdir -p data/raw_data temp data/upscaled_data
 COPY scr/main_test_swinir.py .
 COPY scr/video_conv.py utils
 
-ENTRYPOINT ["python", "main_test_swinir.py", "--task", "real_sr" "--scale", "8", "--large_model", "--model_path", "model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth"]
+CMD ["python3", "./main_test_swinir.py", "--task", "real_sr", "--scale", "8", "--large_model", "--model_path", "model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth"]
