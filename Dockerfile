@@ -8,14 +8,10 @@ RUN pip install torch numpy opencv-python tqdm timm requests argparse
 
 WORKDIR /SwinIR
 
-WORKDIR /SwinIR
-
 RUN git clone https://github.com/JingyunLiang/SwinIR.git .
 
 RUN mkdir -p data/raw_data temp data/upscaled_data
 COPY scr/main_test_swinir.py .
 COPY scr/video_conv.py utils
-
-RUN mkdir -p data/raw_data data/processed_data data/upscaled_data
 
 ENTRYPOINT ["python", "main_test_swinir.py", "--task", "real_sr" "--scale 8", "--large_model", "--model_path", "model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth"]
