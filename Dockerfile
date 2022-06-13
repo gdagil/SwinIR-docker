@@ -10,6 +10,9 @@ WORKDIR /SwinIR
 
 RUN git clone https://github.com/JingyunLiang/SwinIR.git .
 
+RUN chmod +x download-weights.sh
+RUN ./download-weights.sh
+
 RUN mkdir -p data/raw_data temp data/upscaled_data
 COPY scr/main_test_swinir.py .
 COPY scr/video_conv.py utils
