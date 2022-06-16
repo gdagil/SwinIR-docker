@@ -4,7 +4,6 @@ services:
   upscaling:
     build: .
     container_name: SwinIR
-    restart: always
     volumes:
       - ./data:/SwinIR/data
     
