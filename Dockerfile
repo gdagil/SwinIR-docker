@@ -18,4 +18,19 @@ RUN mkdir -p data/raw_data temp data/upscaled_data
 COPY scr/main_test_swinir.py .
 COPY scr/video_conv.py utils
 
-CMD ["python3", "./main_test_swinir.py", "--task", "real_sr", "--scale", "8", "--large_model", "--model_path", "model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth"]
+# CMD echo python3 -W ignore ./main_test_swinir.py \
+# "\n" --task ${TASK_NAME} \
+# "\n" --scale ${SCALE} \
+# "\n" if ["$TR_PS" == ""]; then "--training_patch_size $TR_PS"; else "";\
+# "\n" --${MODEL} --model_path ${MODEL_PATH}
+
+ENTRYPOINT python3 -W ignore ./main_test_swinir.py \
+--task ${TASK_NAME} \
+--scale ${SCALE} \
+--training_patch_size ${TR_PS} \
+--noise ${NOISE} \
+--jpeg ${JPEG} \
+${MODEL} \
+--model_path ${MODEL_PATH} \
+--tile ${TILE} \
+--tile_overlap ${TILE_OVERLAP}

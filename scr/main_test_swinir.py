@@ -6,6 +6,7 @@ from collections import OrderedDict
 import os
 import torch
 import requests
+import sys
 
 from models.network_swinir import SwinIR as net
 from utils import util_calculate_psnr_ssim as util, video_conv as vc
@@ -16,9 +17,9 @@ def main():
     parser.add_argument('--task', type=str, default='color_dn', help='classical_sr, lightweight_sr, real_sr, '
                                                                      'gray_dn, color_dn, jpeg_car')
     parser.add_argument('--scale', type=int, default=1, help='scale factor: 1, 2, 3, 4, 8') # 1 for dn and jpeg car
-    parser.add_argument('--noise', type=int, default=15, help='noise level: 15, 25, 50')
-    parser.add_argument('--jpeg', type=int, default=40, help='scale factor: 10, 20, 30, 40')
-    parser.add_argument('--training_patch_size', type=int, default=128, help='patch size used in training SwinIR. '
+    parser.add_argument('--noise', type=int, const=15, nargs="?", default=15, help='noise level: 15, 25, 50')
+    parser.add_argument('--jpeg', type=int, default=40, const=40, nargs="?", help='scale factor: 10, 20, 30, 40')
+    parser.add_argument('--training_patch_size',type=int, const=128, default=128, nargs="?", help='patch size used in training SwinIR. '
                                        'Just used to differentiate two different settings in Table 2 of the paper. '
                                        'Images are NOT tested patch by patch.')
     parser.add_argument('--large_model', action='store_true', help='use large model, only provided for real image sr')
@@ -26,8 +27,8 @@ def main():
                         default='model_zoo/swinir/001_classicalSR_DIV2K_s48w8_SwinIR-M_x2.pth')
     parser.add_argument('--folder_lq', type=str, default="data/raw_data", help='input low-quality test image folder')
     parser.add_argument('--folder_gt', type=str, default=None, help='input ground-truth test image folder')
-    parser.add_argument('--tile', type=int, default=None, help='Tile size, None for no tile during testing (testing as a whole)')
-    parser.add_argument('--tile_overlap', type=int, default=32, help='Overlapping of different tiles')
+    parser.add_argument('--tile', type=int, default=None, const=None, nargs="?", help='Tile size, None for no tile during testing (testing as a whole)')
+    parser.add_argument('--tile_overlap', type=int, const=32, default=32, nargs="?",help='Overlapping of different tiles')
     parser.add_argument('--folder_ts', type=str, default="data/upscaled_data", help='input folder to save data')
     parser.add_argument('--save_frames', type=bool, default=False, help='Input flag to save frames')
     args = parser.parse_args()
@@ -337,3 +338,4 @@ if __name__ == '__main__':
     for file in os.listdir("temp/"):
         os.remove(file)
     main()
+    sys.exit()  

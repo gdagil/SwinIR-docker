@@ -2,10 +2,24 @@ version: "3.7"
 
 services:
   upscaling:
-    build: .
+    build: 
+      context: .
+
+    environment:
+      TASK_NAME: real_sr
+      SCALE: 4
+      MODEL: --large_model
+      MODEL_PATH: model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth
+      TR_PS:
+      NOISE:
+      JPEG:
+      TILE:
+      TILE_OVERLAP:
+
     container_name: SwinIR
     volumes:
       - ./data:/SwinIR/data
+
     
     # runtime: nvidia
     # OR
