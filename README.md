@@ -9,7 +9,9 @@ Place the files to be processed in `data/raw_data` directory and run the script 
 cd SwinIR-docker 
 sudo docker-compose up
 ```
-
+| RAW                                       | UPSCALED                                                              |
+| ----------------------------------------- | --------------------------------------------------------------------- |
+| ![android_raw](data\raw_data\android.jpg) | ![android_up](data\upscaled_data\swinir_real_sr_x4_large\android.png) |
 ## Usung the image
 So, if you want only build the image and run it with SwinIR settings you can need use environment variables
 * TASK_NAME
@@ -57,6 +59,8 @@ docker run --rm \
   -e MODEL_PATH=model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth \
   swinir_upscaling
 ```
+
+
 
 
 ## Citation
