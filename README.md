@@ -11,7 +11,7 @@ sudo docker-compose up
 ```
 | RAW                                       | UPSCALED                                                              |
 | ----------------------------------------- | --------------------------------------------------------------------- |
-| ![android_raw](data\raw_data\android.jpg) | ![android_up](data\upscaled_data\swinir_real_sr_x4_large\android.png) |
+| ![android_raw](data/raw_data/android.jpg) | ![android_up](data/upscaled_data/swinir_real_sr_x4_large/android.png) |
 ## Usung the image
 So, if you want only build the image and run it with SwinIR settings you can need use environment variables
 * TASK_NAME
