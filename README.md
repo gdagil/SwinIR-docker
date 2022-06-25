@@ -1,3 +1,4 @@
+![Build](https://github.com/gdagil/SwinIR-docker/actions/workflows/docker-publish.yaml/badge.svg)
 # SwinIR-docker 
 
 Simple image to upscaling images and videos in .mp4 format by [SwinIR](https://github.com/JingyunLiang/SwinIR) model
@@ -57,7 +58,7 @@ docker run --rm \
   -e TASK_NAME=real_sr \
   -e SCALE=4 -e MODEL=large_model \
   -e MODEL_PATH=model_zoo/swinir/003_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR-L_x4_GAN.pth \
-  swinir_upscaling
+  danil2286/swin.ir:latest
 ```
 
 
